@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Noise Monitor"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/currentNoiseText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Current: 0 dB"
+        android:textSize="22sp"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/statusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status: OK"
+        android:textSize="20sp"
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/thresholdText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Threshold: 70 dB"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp" />
+
+    <SeekBar
+        android:id="@+id/thresholdSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="70" />
+
+    <TextView
+        android:id="@+id/ledStatusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LED: OFF"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/simulateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Simulate Noise"
+        android:layout_marginTop="20dp" />
+
+</LinearLayout>

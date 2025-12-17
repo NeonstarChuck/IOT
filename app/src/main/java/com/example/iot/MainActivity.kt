@@ -1,47 +1,51 @@
 package com.example.iot
 
-import android.os.Bundle
+import com.example.iot.R
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.iot.ui.theme.IOTTheme
+import android.os.Bundle
+import android.widget.*
+import kotlin.random.Random
+
 
 class MainActivity : ComponentActivity() {
+
+    private var threshold = 70
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            IOTTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+        setContentView(R.layout.mainlayout)
+
+        val currentNoiseText = findViewById<TextView>(R.id.currentNoiseText)
+        val statusText = findViewById<TextView>(R.id.statusText)
+        val thresholdText = findViewById<TextView>(R.id.thresholdText)
+        val ledStatusText = findViewById<TextView>(R.id.ledStatusText)
+        val thresholdSeekBar = findViewById<SeekBar>(R.id.thresholdSeekBar)
+        val simulateButton = findViewById<Button>(R.id.simulateButton)
+
+        thresholdSeekBar.progress = threshold
+
+        thresholdSeekBar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                threshold = progress
+                thresholdText.text = "Threshold: $threshold dB"
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        simulateButton.setOnClickListener {
+            val noise = Random.nextInt(40, 100)
+            currentNoiseText.text = "Current: $noise dB"
+
+            if (noise >= threshold) {
+                statusText.text = "Status: OVER LIMIT"
+                ledStatusText.text = "LED: ON"
+            } else {
+                statusText.text = "Status: OK"
+                ledStatusText.text = "LED: OFF"
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    IOTTheme {
-        Greeting("Android")
     }
 }
