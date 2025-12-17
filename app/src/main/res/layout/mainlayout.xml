@@ -3,23 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="24dp"
+    android:gravity="center_horizontal">
 
     <TextView
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Noise Monitor"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#333333" />
 
     <TextView
         android:id="@+id/currentNoiseText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Current: 0 dB"
-        android:textSize="22sp"
-        android:layout_marginTop="16dp" />
+        android:textSize="32sp"
+        android:layout_marginTop="24dp"
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/statusText"
@@ -30,33 +33,75 @@
         android:layout_marginTop="8dp" />
 
     <TextView
+        android:id="@+id/ledStatusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LED: OFF"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:layout_marginTop="4dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#DDDDDD"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp" />
+
+    <TextView
         android:id="@+id/thresholdText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Threshold: 70 dB"
-        android:textSize="18sp"
-        android:layout_marginTop="16dp" />
+        android:textSize="18sp" />
 
     <SeekBar
         android:id="@+id/thresholdSeekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="100"
-        android:progress="70" />
-
-    <TextView
-        android:id="@+id/ledStatusText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="LED: OFF"
-        android:textSize="18sp"
-        android:layout_marginTop="16dp" />
+        android:progress="70"
+        android:layout_marginTop="8dp" />
 
     <Button
         android:id="@+id/simulateButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Simulate Local Noise"
+        android:layout_marginTop="16dp" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Simulate Noise"
-        android:layout_marginTop="20dp" />
+        android:text="External City Data (MQTT)"
+        android:textSize="14sp"
+        android:layout_marginTop="40dp"
+        android:textColor="#888888" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/sthlmNoiseText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Stockholm: -- dB"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/umeaNoiseText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Umeå: -- dB"
+            android:textSize="16sp" />
+    </LinearLayout>
 
 </LinearLayout>
