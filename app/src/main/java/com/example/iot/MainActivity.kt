@@ -11,7 +11,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 class MainActivity : ComponentActivity() {
 
     private var threshold = 70
-    private val brokerUri = "tcp://192.168.0.85:1883" // Added default port 1883
+    private val brokerUri = "tcp://172.20.10.6:1883"// Added default port 1883
     private val topic = "audio/volume/#"
     // Changed from MqttAndroidClient to MqttClient
     private lateinit var mqttClient: MqttClient
