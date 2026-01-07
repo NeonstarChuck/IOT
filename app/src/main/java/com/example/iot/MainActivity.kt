@@ -9,7 +9,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 
 class MainActivity : ComponentActivity() {
 
-    private var threshold = 70
+    private var threshold = 60
     private val brokerUri = "tcp://172.20.10.6:1883"
     private val topic = "audio/volume/#"
     private lateinit var mqttClient: MqttClient
