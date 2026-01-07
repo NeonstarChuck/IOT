@@ -76,7 +76,7 @@
                         android:layout_height="wrap_content"
                         android:text="45"
                         android:textColor="#FFFFFF"
-                        android:textSize="60dp"
+                        android:textSize="60sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -156,7 +156,7 @@
             android:padding="18dp">
 
             <TextView
-                android:id="@+id/thresholdText"
+                android:id="@+id/warningTitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -204,35 +204,57 @@
                 android:layout_height="wrap_content"
                 android:text="External City Data (MQTT)"
                 android:textColor="#CCFFFFFF"
-                android:textSize="18dp" />
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
 
                 <TextView
                     android:id="@+id/sthlmNoiseText"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
                     android:text="Stockholm: -- dB"
                     android:textColor="#FFFFFF"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/umeaNoiseText"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
                     android:text="Umeå: -- dB"
                     android:textColor="#FFFFFF"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/linkopingNoiseText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Linköping: -- dB"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/goteborgNoiseText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Göteborg: -- dB"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/malmoNoiseText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Malmö: -- dB"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+
             </LinearLayout>
+
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

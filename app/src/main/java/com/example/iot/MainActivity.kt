@@ -9,7 +9,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 
 class MainActivity : ComponentActivity() {
 
-    private var threshold = 60
+    private var threshold = 70
     private val brokerUri = "tcp://172.20.10.6:1883"
     private val topic = "audio/volume/#"
     private lateinit var mqttClient: MqttClient
@@ -22,6 +22,10 @@ class MainActivity : ComponentActivity() {
         val currentNoiseText = findViewById<TextView>(R.id.currentNoiseText)
         val sthlmNoiseText = findViewById<TextView>(R.id.sthlmNoiseText)
         val umeaNoiseText = findViewById<TextView>(R.id.umeaNoiseText)
+        val linkopingNoiseText = findViewById<TextView>(R.id.linkopingNoiseText)
+        val goteborgNoiseText = findViewById<TextView>(R.id.goteborgNoiseText)
+        val malmoNoiseText = findViewById<TextView>(R.id.malmoNoiseText)
+
         val statusText = findViewById<TextView>(R.id.statusText)
         val alertText = findViewById<TextView>(R.id.alertText)
         val thresholdText = findViewById<TextView>(R.id.thresholdText)
@@ -60,10 +64,25 @@ class MainActivity : ComponentActivity() {
                     val db = message.toString().toFloatOrNull() ?: 0f
                     runOnUiThread {
                         when (topic) {
-                            "audio/volume/pi_mic" -> updateUI(db.toInt(), currentNoiseText, statusText, noiseProgressBar, alertText)
-                            "audio/volume/stockholm" -> sthlmNoiseText.text = "Stockholm: ${db.toInt()} dB"
-                            "audio/volume/umea" -> umeaNoiseText.text = "Umeå: ${db.toInt()} dB"
+                            "audio/volume/pi_mic" ->
+                                updateUI(db.toInt(), currentNoiseText, statusText, noiseProgressBar, alertText)
+
+                            "audio/volume/stockholm" ->
+                                sthlmNoiseText.text = "Stockholm: ${db.toInt()} dB"
+
+                            "audio/volume/umea" ->
+                                umeaNoiseText.text = "Umeå: ${db.toInt()} dB"
+
+                            "audio/volume/linkoping" ->
+                                linkopingNoiseText.text = "Linköping: ${db.toInt()} dB"
+
+                            "audio/volume/goteborg" ->
+                                goteborgNoiseText.text = "Göteborg: ${db.toInt()} dB"
+
+                            "audio/volume/malmo" ->
+                                malmoNoiseText.text = "Malmö: ${db.toInt()} dB"
                         }
+
                     }
                 }
                 override fun connectionLost(cause: Throwable?) {
