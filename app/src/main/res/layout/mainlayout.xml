@@ -17,6 +17,16 @@
         android:textColor="#FFFFFF"
         android:textSize="28sp"
         android:textStyle="bold" />
+    <TextView
+        android:id="@+id/locationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location: Kista"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="sans-serif-medium" />
 
     <!-- CARD 1: Gauge + status -->
 
@@ -142,45 +152,13 @@
     </com.google.android.material.card.MaterialCardView>
 
 
-    <!-- CARD 3: Threshold + seekbar + button -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#2A3B8EFF"
-            android:orientation="vertical"
-            android:padding="18dp">
 
-            <TextView
-                android:id="@+id/warningTitleText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Threshold: 70 dB"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp" />
 
-            <SeekBar
-                android:id="@+id/thresholdSeekBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:max="100"
-                android:progress="70" />
 
-            <Button
-                android:id="@+id/simulateButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Simulate local noise" />
 
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+
+
 
     <!-- CARD 4: External city data -->
     <com.google.android.material.card.MaterialCardView
@@ -202,9 +180,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="External City Data (MQTT)"
+                android:text="Swedish Cities Noise Traffic"
                 android:textColor="#CCFFFFFF"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -227,12 +205,12 @@
                     android:layout_height="wrap_content"
                     android:text="Umeå: -- dB"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                                    android:textSize="18sp" />
 
-                <TextView
-                    android:id="@+id/linkopingNoiseText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                                <TextView
+                                    android:id="@+id/linkopingNoiseText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
                     android:text="Linköping: -- dB"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp" />
@@ -253,7 +231,19 @@
                     android:textColor="#FFFFFF"
                     android:textSize="18sp" />
 
+                <Button
+                    android:id="@+id/btnChangeCity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Change City"
+                    android:textAllCaps="false"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="#4C6EF5"
+                    android:textColor="#FFFFFF"
+                    android:layout_gravity="center_horizontal" />
+
             </LinearLayout>
+
 
 
         </LinearLayout>

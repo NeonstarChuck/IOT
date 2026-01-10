@@ -6,6 +6,7 @@ import android.widget.*
 import androidx.activity.ComponentActivity
 import org.eclipse.paho.client.mqttv3.*
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainActivity : ComponentActivity() {
 
@@ -14,11 +15,18 @@ class MainActivity : ComponentActivity() {
     private val topic = "audio/volume/#"
     private lateinit var mqttClient: MqttClient
 
+    // Controls which topic updates the gauge
+    private var gaugeTopic = "audio/volume/pi_mic"
+    private var alertDialogShown = false
+    private lateinit var locationText: TextView
+    private lateinit var changeCityButton: Button
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.mainlayout)
 
-        // Koppla UI-komponenter
+        // --- UI ---
         val currentNoiseText = findViewById<TextView>(R.id.currentNoiseText)
         val sthlmNoiseText = findViewById<TextView>(R.id.sthlmNoiseText)
         val umeaNoiseText = findViewById<TextView>(R.id.umeaNoiseText)
@@ -29,44 +37,53 @@ class MainActivity : ComponentActivity() {
         val statusText = findViewById<TextView>(R.id.statusText)
         val alertText = findViewById<TextView>(R.id.alertText)
         val thresholdText = findViewById<TextView>(R.id.thresholdText)
-        val thresholdSeekBar = findViewById<SeekBar>(R.id.thresholdSeekBar)
-        val simulateButton = findViewById<Button>(R.id.simulateButton)
         val noiseProgressBar = findViewById<ProgressBar>(R.id.noiseProgressBar)
 
+        locationText = findViewById(R.id.locationText)
+        changeCityButton = findViewById(R.id.btnChangeCity)
 
-        // Konfigurera SeekBar
-        thresholdSeekBar.progress = threshold
+        locationText.text = "Location: Kista"
         thresholdText.text = "Threshold: $threshold dB"
 
-        thresholdSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                threshold = progress
-                thresholdText.text = "Threshold: $threshold dB"
-                val currentDb = currentNoiseText.text.toString().toIntOrNull() ?: 0
-                updateAlert(currentDb, alertText)
-
+        // --- Button: Toggle gauge source ---
+        changeCityButton.setOnClickListener {
+            if (gaugeTopic == "audio/volume/pi_mic") {
+                gaugeTopic = "audio/volume/stockholm"
+                locationText.text = "Location: Stockholm"
+            } else {
+                gaugeTopic = "audio/volume/pi_mic"
+                locationText.text = "Location: Kista"
             }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        // Simuleringsknapp
-        simulateButton.setOnClickListener {
-            val noise = (20..100).random()
-            updateUI(noise, currentNoiseText, statusText, noiseProgressBar, alertText)
         }
 
-        // --- MQTT Setup ---
+        // --- MQTT ---
         try {
-            mqttClient = MqttClient(brokerUri, "AndroidClient_${System.currentTimeMillis()}", MemoryPersistence())
+            mqttClient = MqttClient(
+                brokerUri,
+                "AndroidClient_${System.currentTimeMillis()}",
+                MemoryPersistence()
+            )
+
             mqttClient.setCallback(object : MqttCallback {
+
                 override fun messageArrived(topic: String?, message: MqttMessage?) {
                     val db = message.toString().toFloatOrNull() ?: 0f
-                    runOnUiThread {
-                        when (topic) {
-                            "audio/volume/pi_mic" ->
-                                updateUI(db.toInt(), currentNoiseText, statusText, noiseProgressBar, alertText)
 
+                    runOnUiThread {
+
+                        // Update gauge ONLY for selected city
+                        if (topic == gaugeTopic) {
+                            updateUI(
+                                db.toInt(),
+                                currentNoiseText,
+                                statusText,
+                                noiseProgressBar,
+                                alertText
+                            )
+                        }
+
+                        // Always update city text views
+                        when (topic) {
                             "audio/volume/stockholm" ->
                                 sthlmNoiseText.text = "Stockholm: ${db.toInt()} dB"
 
@@ -82,12 +99,16 @@ class MainActivity : ComponentActivity() {
                             "audio/volume/malmo" ->
                                 malmoNoiseText.text = "Malmö: ${db.toInt()} dB"
                         }
-
                     }
                 }
+
                 override fun connectionLost(cause: Throwable?) {
-                    runOnUiThread { statusText.text = "Status: Disconnected" }
+                    runOnUiThread {
+                        statusText.text = "Status: Disconnected"
+                        statusText.setTextColor(Color.RED)
+                    }
                 }
+
                 override fun deliveryComplete(token: IMqttDeliveryToken?) {}
             })
 
@@ -105,28 +126,61 @@ class MainActivity : ComponentActivity() {
                 options.isCleanSession = true
                 mqttClient.connect(options)
                 mqttClient.subscribe(topic, 0)
-                runOnUiThread { statusView.text = "Status: Connected" }
+
+                runOnUiThread {
+                    statusView.text = "Status: Connected"
+                    statusView.setTextColor(Color.GREEN)
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
-                runOnUiThread { statusView.text = "Status: MQTT Failed" }
+                runOnUiThread {
+                    statusView.text = "Status: MQTT Failed"
+                    statusView.setTextColor(Color.RED)
+                }
             }
         }.start()
     }
+    private fun showNoiseDialog(location: String, noise: Int) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Noise Warning")
+            .setMessage("Location: $location\nThe noise level is too loud ($noise dB).")
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setCancelable(false)
+            .show()
+    }
 
-    // Uppdaterad funktion som nu tar emot ProgressBar som ett argument
-    private fun updateUI(noise: Int, noiseText: TextView, status: TextView, bar: ProgressBar, alertText: TextView) {
+    private fun updateUI(
+        noise: Int,
+        noiseText: TextView,
+        status: TextView,
+        bar: ProgressBar,
+        alertText: TextView
+    ) {
         noiseText.text = noise.toString()
         bar.progress = noise
+
+        val location =
+            if (gaugeTopic == "audio/volume/pi_mic") "Kista" else "Stockholm"
 
         if (noise > threshold) {
             status.text = "Status: TOO LOUD"
             status.setTextColor(Color.RED)
+
+            if (!alertDialogShown) {
+                showNoiseDialog(location, noise)
+                alertDialogShown = true
+            }
         } else {
             status.text = "Status: OK"
             status.setTextColor(Color.BLACK)
+            alertDialogShown = false // reset when noise drops
         }
+
         updateAlert(noise, alertText)
     }
+
 
     private fun updateAlert(noise: Int, alertText: TextView) {
         if (noise > threshold) {
@@ -135,5 +189,4 @@ class MainActivity : ComponentActivity() {
             alertText.text = "Noise level within acceptable range"
         }
     }
-
 }
